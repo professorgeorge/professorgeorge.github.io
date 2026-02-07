@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>My GitHub Pages Sites</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 700px; margin: 2rem auto; padding: 0 1rem; }
+    h1 { font-size: 1.8rem; }
+    ul { list-style: none; padding: 0; }
+    li { margin: 0.5rem 0; }
+    .desc { color: #555; font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+  <h1>My GitHub Pages Sites</h1>
+  <p>Automatically generated list of my published sites.</p>
+  <ul id="sites"></ul>
+
+  <script>
+    const username = "myselfgeorge"; // ← change this
+
+    async function loadSites() {
+      const ul = document.getElementById("sites");
+      ul.innerHTML = "Loading…";
+
+      const resp = await fetch(`https://api.github.com/users/${username}/repos?per_page=100`);
+      const repos = await resp.json();
+
+      const pagesRepos = repos.filter(r => r.has_pages);
+
+      ul.innerHTML = "";
+      if (pagesRepos.length === 0) {
+        ul.textContent = "No GitHub Pages sites found.";
+        return;
+      }
+
+      pagesRepos.forEach(repo => {
+        const li = document.createElement("li");
+        const link = document.createElement("a");
+
+        let siteUrl;
+        if (repo.name === `${username}.github.io`) {
+          siteUrl = `https://${username}.github.io`;
+        } else {
+          siteUrl = `https://${username}.github.io/${repo.name}`;
+        }
+
+        link.href = siteUrl;
+        link.textContent = repo.name;
+
+        const desc = document.createElement("div");
+        desc.className = "desc";
+        desc.textContent = repo.description || repo.html_url;
+
+        li.appendChild(link);
+        li.appendChild(desc);
+        ul.appendChild(li);
+      });
+    }
+
+    loadSites();
+  </script>
+</body>
+</html>
