@@ -109,6 +109,12 @@
       background-clip: text;
       font-weight: 700;
     }
+    
+    @supports not (background-clip: text) {
+      h1 {
+        color: #f1f5f9;
+      }
+    }
 
     .dot {
       width: 11px;
@@ -447,6 +453,21 @@
         padding: 1.1rem 1rem 1.3rem;
       }
     }
+    
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0s !important;
+        transition-duration: 0s !important;
+      }
+      
+      .page,
+      li.site,
+      footer {
+        animation: none !important;
+      }
+    }
   </style>
 </head>
 <body>
@@ -502,12 +523,17 @@
           return;
         }
 
-        pagesRepos.forEach(repo => {
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        pagesRepos.forEach((repo, index) => {
           const li = document.createElement("li");
           li.className = "site";
-          li.style.animation = `slideIn 0.5s ease-out forwards`;
-          li.style.animationDelay = `${pagesRepos.indexOf(repo) * 0.1}s`;
-          li.style.opacity = "0";
+          
+          if (!prefersReducedMotion) {
+            li.style.animation = `slideIn 0.5s ease-out forwards`;
+            li.style.animationDelay = `${index * 0.1}s`;
+            li.style.opacity = "0";
+          }
 
           let siteUrl;
           if (repo.name === `${username}.github.io`) {
