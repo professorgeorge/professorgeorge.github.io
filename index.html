@@ -8,234 +8,161 @@
         :root {
             --bg: #0f172a;
             --bg-alt: #020617;
-            --card: #020617;
+            --card: rgba(15, 23, 42, 0.8);
             --accent: #38bdf8;
             --accent-soft: rgba(56,189,248,0.12);
             --text-main: #e5e7eb;
             --text-muted: #9ca3af;
-            --border-subtle: #1f2937;
+            --border-subtle: rgba(148, 163, 184, 0.1);
+            --linkedin: #0a66c2;
         }
         * { box-sizing: border-box; }
         body {
             margin: 0;
             min-height: 100vh;
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
             background: radial-gradient(circle at top, #1e293b 0, #020617 55%, #000 100%);
             color: var(--text-main);
             display: flex;
-            align-items: stretch;
             justify-content: center;
         }
-        .page {
-            width: 100%;
-            max-width: 960px;
-            padding: 2.5rem 1.5rem 3rem;
-        }
+        .page { width: 100%; max-width: 1000px; padding: 3rem 1.5rem; }
         header {
             display: flex;
-            flex-wrap: wrap;
-            align-items: flex-start;
+            align-items: center;
             justify-content: space-between;
-            gap: 1rem;
-            margin-bottom: 2rem;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            animation: fadeIn 0.8s ease-out;
         }
-        .title-block { max-width: 560px; }
-        h1 {
-            margin: 0 0 0.35rem;
-            font-size: clamp(2rem, 2.8vw, 2.6rem);
-            letter-spacing: -0.03em;
-            display: flex;
-            align-items: center;
-            gap: 0.45rem;
+        .profile-section { display: flex; align-items: center; gap: 1.5rem; }
+        .avatar {
+            width: 80px; height: 80px;
+            border-radius: 50%;
+            border: 3px solid var(--accent);
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+            background: #1e293b;
         }
-        .dot {
-            width: 11px;
-            height: 11px;
-            border-radius: 999px;
-            background: radial-gradient(circle at 30% 20%, #f97316, #ef4444 60%, #7c2d12 100%);
-            box-shadow: 0 0 16px rgba(248, 113, 113, 0.6);
+        .title-block h1 { margin: 0; font-size: 2.2rem; letter-spacing: -0.04em; }
+        .subtitle { margin: 0.2rem 0 0; color: var(--text-muted); font-size: 1rem; }
+        
+        .btn-linkedin {
+            display: inline-flex; align-items: center; gap: 0.6rem;
+            background: var(--linkedin); color: white;
+            text-decoration: none; padding: 0.6rem 1.2rem;
+            border-radius: 999px; font-weight: 600; font-size: 0.9rem;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
-        .subtitle { margin: 0; font-size: 0.98rem; color: var(--text-muted); }
-        .meta {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            gap: 0.35rem;
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            text-align: right;
-        }
-        .pill {
-            padding: 0.15rem 0.6rem;
-            border-radius: 999px;
-            border: 1px solid rgba(148,163,184,0.4);
-            background: linear-gradient(135deg, rgba(15,23,42,0.9), rgba(15,23,42,0.4));
-            display: inline-flex;
-            align-items: center;
-            gap: 0.35rem;
-            white-space: nowrap;
-        }
-        .pill-dot { width: 6px; height: 6px; border-radius: 999px; background: #22c55e; box-shadow: 0 0 8px rgba(34,197,94,0.8); }
+        .btn-linkedin:hover { transform: scale(1.05); box-shadow: 0 0 15px rgba(10, 102, 194, 0.4); }
+
         main {
-            background: radial-gradient(circle at top left, #111827, #020617 60%);
-            border-radius: 1.25rem;
-            border: 1px solid rgba(148,163,184,0.3);
-            box-shadow: 0 22px 60px rgba(15,23,42,0.85), 0 0 0 1px rgba(15,23,42,0.7);
-            padding: 1.4rem 1.4rem 1.6rem;
-            position: relative;
-            overflow: hidden;
-        }
-        .list-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 1rem;
-            margin-bottom: 0.9rem;
-        }
-        .list-title {
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 0.14em;
-            color: var(--text-muted);
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-        }
-        .divider {
-            height: 1px;
-            background: linear-gradient( to right, rgba(148,163,184,0.1), rgba(148,163,184,0.5), rgba(148,163,184,0.1) );
-            margin: 0.5rem 0 0.9rem;
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(12px);
+            border-radius: 1.5rem;
+            border: 1px solid var(--border-subtle);
+            padding: 2rem;
         }
         #sites {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 0.9rem;
+            list-style: none; padding: 0; margin: 0;
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem;
         }
-        li.site {
-            position: relative;
-            padding: 0.85rem 0.9rem;
-            border-radius: 0.85rem;
-            background: radial-gradient(circle at top left, #020617, #020617 65%);
-            border: 1px solid rgba(31,41,55,0.9);
-            box-shadow: 0 14px 30px rgba(0,0,0,0.6);
-            transition: transform 150ms ease, box-shadow 150ms ease, border-color 150ms ease;
+        .site-card {
+            background: var(--card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 1rem;
+            padding: 1.2rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative; overflow: hidden;
         }
-        li.site:hover {
-            transform: translateY(-3px);
-            border-color: rgba(56,189,248,0.7);
+        .site-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            border-color: var(--accent);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
-        li.site a {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.35rem;
-            font-weight: 500;
-            font-size: 0.98rem;
-            color: var(--accent);
-            text-decoration: none;
+        .site-card a { color: var(--accent); text-decoration: none; font-weight: 700; font-size: 1.1rem; }
+        .badge {
+            font-size: 0.65rem; text-transform: uppercase; padding: 0.2rem 0.5rem;
+            border-radius: 4px; background: var(--accent-soft); color: var(--accent);
+            margin-left: 0.5rem; vertical-align: middle;
         }
-        .host-badge {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--text-muted);
-            border-radius: 999px;
-            border: 1px solid rgba(148,163,184,0.2);
-            padding: 0.05rem 0.4rem;
-            background: rgba(15,23,42,0.7);
-            margin-left: 0.5rem;
-        }
-        .desc { margin-top: 0.35rem; font-size: 0.83rem; color: var(--text-muted); line-height: 1.4; }
-        .stats { margin-top: 0.6rem; display: flex; gap: 0.8rem; font-size: 0.75rem; color: var(--text-muted); }
-        footer { margin-top: 1.6rem; font-size: 0.78rem; color: var(--text-muted); display: flex; justify-content: space-between; }
-        @media (max-width: 640px) {
-            header { flex-direction: column; }
-            .meta { align-items: flex-start; text-align: left; }
+        .repo-desc { margin: 0.8rem 0; font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; }
+        .repo-meta { display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: var(--text-muted); }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @media (max-width: 768px) {
+            header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+            .btn-linkedin { align-self: flex-start; }
         }
     </style>
 </head>
 <body>
     <div class="page">
         <header>
-            <div class="title-block">
-                <h1><span class="dot"></span> Babu George @ GitHub</h1>
-                <p class="subtitle">Exploring the intersection of AI, Management, and Human Experience</p>
+            <div class="profile-section">
+                <img id="user-avatar" class="avatar" src="https://github.com/professorgeorge.png" alt="Babu George" />
+                <div class="title-block">
+                    <h1>Babu George @ GitHub</h1>
+                    <p class="subtitle">Order in chaos • Strategic Intelligence • AI Ethics</p>
+                </div>
             </div>
-            <div class="meta">
-                <div class="pill"><span class="pill-dot"></span> Full Repository Sync</div>
-                <span>Last updated from GitHub API</span>
-            </div>
+            <a href="https://www.linkedin.com/in/beingbabu/" target="_blank" class="btn-linkedin">
+                Connect on LinkedIn
+            </a>
         </header>
 
         <main>
-            <div class="list-header">
-                <div class="list-title">All Projects & Repositories</div>
-            </div>
-            <div class="divider"></div>
-            <ul id="sites">
-                <li class="empty-state">Loading portfolio...</li>
-            </ul>
+            <ul id="sites"><li style="color: var(--text-muted)">Syncing repositories...</li></ul>
         </main>
 
-        <footer>
-            <span>Built by <a href="https://www.linkedin.com/in/beingbabu/">Babu George, PhD</a></span>
-            <span>Order in chaos</span>
+        <footer style="margin-top: 2rem; text-align: center; color: var(--text-muted); font-size: 0.8rem;">
+            &copy; 2026 Babu George, PhD • Automatically updating from GitHub API
         </footer>
     </div>
 
     <script>
         const username = "professorgeorge";
-        async function loadPortfolio() {
+        async function fetchPortfolio() {
             const ul = document.getElementById("sites");
             try {
-                let allRepos = [];
+                let repos = [];
                 let page = 1;
-                while (true) {
-                    const resp = await fetch(`https://api.github.com/users/${username}/repos?per_page=100&page=${page}&sort=updated`);
-                    const data = await resp.json();
-                    if (!data || data.length === 0) break;
-                    allRepos = allRepos.concat(data);
-                    if (data.length < 100) break;
+                while(true) {
+                    const r = await fetch(`https://api.github.com/users/${username}/repos?per_page=100&page=${page}&sort=pushed`);
+                    const data = await r.json();
+                    if(!data || data.length === 0) break;
+                    repos = repos.concat(data);
+                    if(data.length < 100) break;
                     page++;
                 }
-
-                ul.innerHTML = "";
                 
-                // Sort: Pages first, then by stars/recency
-                allRepos.sort((a, b) => {
-                    if (a.has_pages && !b.has_pages) return -1;
-                    if (!a.has_pages && b.has_pages) return 1;
-                    return new Date(b.updated_at) - new Date(a.updated_at);
-                });
+                ul.innerHTML = "";
+                repos.sort((a,b) => (b.stargazers_count - a.stargazers_count) || (new Date(b.pushed_at) - new Date(a.pushed_at)));
 
-                allRepos.forEach(repo => {
-                    if (repo.name === username + ".github.io" && repo.name !== "professorgeorge.github.io") return; // Skip the profile/root repo if needed, but here we want to show it as the entry point
-                    
-                    const li = document.createElement("li");
-                    li.className = "site";
-                    
-                    const siteUrl = repo.has_pages 
+                repos.forEach(repo => {
+                    const card = document.createElement("li");
+                    card.className = "site-card";
+                    const url = repo.has_pages 
                         ? (repo.name === `${username}.github.io` ? `https://${username}.github.io` : `https://${username}.github.io/${repo.name}`)
                         : repo.html_url;
 
-                    li.innerHTML = `
-                        <a href="${siteUrl}" target="_blank">${repo.name}</a>
-                        ${repo.has_pages ? '<span class="host-badge">Live Site</span>' : '<span class="host-badge">Repo</span>'}
-                        <div class="desc">${repo.description || "No description provided."}</div>
-                        <div class="stats">
-                            <span>${repo.language || "Mixed"}</span>
+                    card.innerHTML = `
+                        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                            <a href="${url}" target="_blank">${repo.name}</a>
+                            <span class="badge">${repo.has_pages ? 'Live' : 'Code'}</span>
+                        </div>
+                        <p class="repo-desc">${repo.description || "Experimental work in progress."}</p>
+                        <div class="repo-meta">
+                            <span>${repo.language || "Open Source"}</span>
                             <span>⭐ ${repo.stargazers_count}</span>
                         </div>
                     `;
-                    ul.appendChild(li);
+                    ul.appendChild(card);
                 });
             } catch (e) {
-                ul.innerHTML = '<li class="empty-state">Error loading repositories. Please visit <a href="https://github.com/professorgeorge">GitHub directly</a>.</li>';
+                ul.innerHTML = "<li>Offline. Check back later!</li>";
             }
         }
-        loadPortfolio();
+        fetchPortfolio();
     </script>
 </body>
 </html>
