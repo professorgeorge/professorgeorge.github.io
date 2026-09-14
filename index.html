@@ -45,7 +45,7 @@
         }
         .title-block h1 { margin: 0; font-size: 2.2rem; letter-spacing: -0.04em; }
         .subtitle { margin: 0.2rem 0 0; color: var(--text-muted); font-size: 1rem; }
-        
+
         .btn-linkedin {
             display: inline-flex; align-items: center; gap: 0.6rem;
             background: var(--linkedin); color: white;
@@ -87,7 +87,7 @@
         }
         .repo-desc { margin: 0.8rem 0; font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; }
         .repo-meta { display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: var(--text-muted); }
-        
+
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         @media (max-width: 768px) {
             header { flex-direction: column; align-items: flex-start; gap: 1rem; }
@@ -102,7 +102,7 @@
                 <img id="user-avatar" class="avatar" src="https://github.com/professorgeorge.png" alt="Babu George" />
                 <div class="title-block">
                     <h1>Babu George @ GitHub</h1>
-                    <p class="subtitle">Order in chaos • Strategic Intelligence • AI Ethics</p>
+                    <p class="subtitle">Order in chaos &bull; Strategic Intelligence &bull; AI Ethics</p>
                 </div>
             </div>
             <a href="https://www.linkedin.com/in/beingbabu/" target="_blank" class="btn-linkedin">
@@ -115,7 +115,7 @@
         </main>
 
         <footer style="margin-top: 2rem; text-align: center; color: var(--text-muted); font-size: 0.8rem;">
-            &copy; 2026 Babu George, PhD • Automatically updating from GitHub API
+            &copy; 2026 Babu George, PhD &bull; Automatically updating from GitHub API
         </footer>
     </div>
 
@@ -134,21 +134,23 @@
                     if(data.length < 100) break;
                     page++;
                 }
-                
+
                 ul.innerHTML = "";
                 repos.sort((a,b) => (b.stargazers_count - a.stargazers_count) || (new Date(b.pushed_at) - new Date(a.pushed_at)));
 
-                repos.forEach(repo => {
+                const filtered = repos.filter(r => r.has_pages);
+
+                filtered.forEach(repo => {
                     const card = document.createElement("li");
                     card.className = "site-card";
-                    const url = repo.has_pages 
-                        ? (repo.name === `${username}.github.io` ? `https://${username}.github.io` : `https://${username}.github.io/${repo.name}`)
-                        : repo.html_url;
+                    const url = repo.name === `${username}.github.io`
+                        ? `https://${username}.github.io`
+                        : `https://${username}.github.io/${repo.name}`;
 
                     card.innerHTML = `
                         <div style="display:flex; justify-content:space-between; align-items:flex-start;">
                             <a href="${url}" target="_blank">${repo.name}</a>
-                            <span class="badge">${repo.has_pages ? 'Live' : 'Code'}</span>
+                            <span class="badge">Live</span>
                         </div>
                         <p class="repo-desc">${repo.description || "Experimental work in progress."}</p>
                         <div class="repo-meta">
@@ -158,6 +160,10 @@
                     `;
                     ul.appendChild(card);
                 });
+
+                if (filtered.length === 0) {
+                    ul.innerHTML = "<li style='color: var(--text-muted)'>No published sites yet.</li>";
+                }
             } catch (e) {
                 ul.innerHTML = "<li>Offline. Check back later!</li>";
             }
