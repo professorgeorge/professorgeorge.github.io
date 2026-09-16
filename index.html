@@ -22,6 +22,30 @@
             --text-muted: #b9a998;
             --border-subtle: rgba(243, 234, 217, 0.09);
             --linkedin: #0a66c2;
+            --main-bg: rgba(35, 25, 15, 0.35);
+            --card-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            --glow-1: rgba(232, 147, 90, 0.16);
+            --glow-2: rgba(143, 174, 139, 0.14);
+            --bg-floor: #060403;
+        }
+        :root[data-theme="light"] {
+            --bg-deep: #f6f1e7;
+            --bg-mid: #fdf8ee;
+            --card: rgba(255, 255, 255, 0.7);
+            --accent: #c9622f;
+            --accent-strong: #b8860b;
+            --accent-soft: rgba(201, 98, 47, 0.1);
+            --sage: #4f7a5a;
+            --sage-soft: rgba(79, 122, 90, 0.14);
+            --text-main: #2a2118;
+            --text-muted: #6b5d4d;
+            --border-subtle: rgba(42, 33, 24, 0.1);
+            --linkedin: #0a66c2;
+            --main-bg: rgba(255, 255, 255, 0.45);
+            --card-shadow: 0 10px 30px rgba(0,0,0,0.12);
+            --glow-1: rgba(201, 98, 47, 0.1);
+            --glow-2: rgba(79, 122, 90, 0.1);
+            --bg-floor: #fffdf7;
         }
         * { box-sizing: border-box; }
         body {
@@ -29,12 +53,13 @@
             min-height: 100vh;
             font-family: 'Manrope', system-ui, -apple-system, sans-serif;
             background:
-                radial-gradient(circle at 15% 0%, rgba(232, 147, 90, 0.16) 0, transparent 45%),
-                radial-gradient(circle at 85% 15%, rgba(143, 174, 139, 0.14) 0, transparent 50%),
-                radial-gradient(circle at top, var(--bg-mid) 0, var(--bg-deep) 60%, #060403 100%);
+                radial-gradient(circle at 15% 0%, var(--glow-1) 0, transparent 45%),
+                radial-gradient(circle at 85% 15%, var(--glow-2) 0, transparent 50%),
+                radial-gradient(circle at top, var(--bg-mid) 0, var(--bg-deep) 60%, var(--bg-floor) 100%);
             color: var(--text-main);
             display: flex;
             justify-content: center;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
         .page { width: 100%; max-width: 1000px; padding: 3rem 1.5rem; }
         header {
@@ -70,13 +95,25 @@
         }
         .btn-linkedin:hover { transform: scale(1.05); box-shadow: 0 0 15px rgba(10, 102, 194, 0.4); }
 
+        .header-actions { display: flex; align-items: center; gap: 0.75rem; }
+        .btn-theme {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 2.6rem; height: 2.6rem;
+            background: var(--card); color: var(--text-main);
+            border: 1px solid var(--border-subtle);
+            border-radius: 50%; cursor: pointer; font-size: 1.2rem;
+            transition: transform 0.2s, border-color 0.2s, background-color 0.3s ease;
+        }
+        .btn-theme:hover { transform: scale(1.08) rotate(15deg); border-color: var(--accent); }
+
         main {
-            background: rgba(35, 25, 15, 0.35);
+            background: var(--main-bg);
             backdrop-filter: blur(14px);
             border-radius: 1.5rem;
             border: 1px solid var(--border-subtle);
             padding: 2rem;
             box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
         }
         #sites {
             list-style: none; padding: 0; margin: 0;
@@ -87,7 +124,7 @@
             border: 1px solid var(--border-subtle);
             border-radius: 1rem;
             padding: 1.2rem;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.3s, box-shadow 0.3s, background-color 0.3s ease;
             position: relative; overflow: hidden;
         }
         .site-card::before {
@@ -99,7 +136,7 @@
         .site-card:hover {
             transform: translateY(-5px) scale(1.02);
             border-color: var(--accent);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: var(--card-shadow);
         }
         .site-card a { color: var(--accent); text-decoration: none; font-weight: 700; font-size: 1.1rem; position: relative; }
         .badge {
@@ -114,11 +151,18 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         @media (max-width: 768px) {
             header { flex-direction: column; align-items: flex-start; gap: 1rem; }
-            .btn-linkedin { align-self: flex-start; }
+            .header-actions { align-self: flex-start; }
         }
     </style>
 </head>
 <body>
+    <script>
+        (function () {
+            const stored = localStorage.getItem("theme");
+            const theme = stored || (window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
+            document.documentElement.setAttribute("data-theme", theme);
+        })();
+    </script>
     <div class="page">
         <header>
             <div class="profile-section">
@@ -128,9 +172,12 @@
                     <p class="subtitle">Order in chaos &bull; Strategic Intelligence &bull; AI Ethics</p>
                 </div>
             </div>
-            <a href="https://www.linkedin.com/in/beingbabu/" target="_blank" class="btn-linkedin">
-                Connect on LinkedIn
-            </a>
+            <div class="header-actions">
+                <button id="theme-toggle" class="btn-theme" type="button" aria-label="Toggle dark and light mode" title="Toggle dark/light mode">🌙</button>
+                <a href="https://www.linkedin.com/in/beingbabu/" target="_blank" class="btn-linkedin">
+                    Connect on LinkedIn
+                </a>
+            </div>
         </header>
 
         <main>
@@ -144,6 +191,25 @@
 
     <script>
         const username = "professorgeorge";
+
+        function updateThemeToggleIcon(theme) {
+            const btn = document.getElementById("theme-toggle");
+            if (btn) btn.textContent = theme === "light" ? "☀️" : "🌙";
+        }
+
+        function initThemeToggle() {
+            const current = document.documentElement.getAttribute("data-theme") || "dark";
+            updateThemeToggleIcon(current);
+            const btn = document.getElementById("theme-toggle");
+            btn.addEventListener("click", () => {
+                const next = document.documentElement.getAttribute("data-theme") === "light" ? "dark" : "light";
+                document.documentElement.setAttribute("data-theme", next);
+                localStorage.setItem("theme", next);
+                updateThemeToggleIcon(next);
+            });
+        }
+        initThemeToggle();
+
         async function fetchPortfolio() {
             const ul = document.getElementById("sites");
             try {
