@@ -4,24 +4,34 @@
     <meta charset="UTF-8" />
     <title>Babu George @ GitHub</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;700&family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet" />
     <style>
+        /* "Ember & Sage" palette: warm terracotta + amber accents against an inky
+           ink-navy backdrop, with a muted sage secondary tone for contrast. */
         :root {
-            --bg: #0f172a;
-            --bg-alt: #020617;
-            --card: rgba(15, 23, 42, 0.8);
-            --accent: #38bdf8;
-            --accent-soft: rgba(56,189,248,0.12);
-            --text-main: #e5e7eb;
-            --text-muted: #9ca3af;
-            --border-subtle: rgba(148, 163, 184, 0.1);
+            --bg-deep: #14110f;
+            --bg-mid: #23190f;
+            --card: rgba(38, 30, 24, 0.65);
+            --accent: #e8935a;
+            --accent-strong: #f2b544;
+            --accent-soft: rgba(232, 147, 90, 0.14);
+            --sage: #8fae8b;
+            --sage-soft: rgba(143, 174, 139, 0.16);
+            --text-main: #f3ead9;
+            --text-muted: #b9a998;
+            --border-subtle: rgba(243, 234, 217, 0.09);
             --linkedin: #0a66c2;
         }
         * { box-sizing: border-box; }
         body {
             margin: 0;
             min-height: 100vh;
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            background: radial-gradient(circle at top, #1e293b 0, #020617 55%, #000 100%);
+            font-family: 'Manrope', system-ui, -apple-system, sans-serif;
+            background:
+                radial-gradient(circle at 15% 0%, rgba(232, 147, 90, 0.16) 0, transparent 45%),
+                radial-gradient(circle at 85% 15%, rgba(143, 174, 139, 0.14) 0, transparent 50%),
+                radial-gradient(circle at top, var(--bg-mid) 0, var(--bg-deep) 60%, #060403 100%);
             color: var(--text-main);
             display: flex;
             justify-content: center;
@@ -39,12 +49,17 @@
         .avatar {
             width: 80px; height: 80px;
             border-radius: 50%;
-            border: 3px solid var(--accent);
-            box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
-            background: #1e293b;
+            padding: 3px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-strong), var(--sage));
+            box-shadow: 0 0 24px rgba(232, 147, 90, 0.35);
         }
-        .title-block h1 { margin: 0; font-size: 2.2rem; letter-spacing: -0.04em; }
-        .subtitle { margin: 0.2rem 0 0; color: var(--text-muted); font-size: 1rem; }
+        .title-block h1 {
+            margin: 0; font-size: 2.3rem; letter-spacing: -0.03em;
+            font-family: 'Fraunces', serif; font-weight: 700;
+            background: linear-gradient(100deg, var(--text-main) 30%, var(--accent) 100%);
+            -webkit-background-clip: text; background-clip: text; color: transparent;
+        }
+        .subtitle { margin: 0.35rem 0 0; color: var(--text-muted); font-size: 1rem; letter-spacing: 0.01em; }
 
         .btn-linkedin {
             display: inline-flex; align-items: center; gap: 0.6rem;
@@ -56,11 +71,12 @@
         .btn-linkedin:hover { transform: scale(1.05); box-shadow: 0 0 15px rgba(10, 102, 194, 0.4); }
 
         main {
-            background: rgba(15, 23, 42, 0.4);
-            backdrop-filter: blur(12px);
+            background: rgba(35, 25, 15, 0.35);
+            backdrop-filter: blur(14px);
             border-radius: 1.5rem;
             border: 1px solid var(--border-subtle);
             padding: 2rem;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
         }
         #sites {
             list-style: none; padding: 0; margin: 0;
@@ -74,19 +90,26 @@
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative; overflow: hidden;
         }
+        .site-card::before {
+            content: ""; position: absolute; inset: 0;
+            background: linear-gradient(135deg, var(--accent-soft), transparent 60%);
+            opacity: 0; transition: opacity 0.3s;
+        }
+        .site-card:hover::before { opacity: 1; }
         .site-card:hover {
             transform: translateY(-5px) scale(1.02);
             border-color: var(--accent);
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
-        .site-card a { color: var(--accent); text-decoration: none; font-weight: 700; font-size: 1.1rem; }
+        .site-card a { color: var(--accent); text-decoration: none; font-weight: 700; font-size: 1.1rem; position: relative; }
         .badge {
             font-size: 0.65rem; text-transform: uppercase; padding: 0.2rem 0.5rem;
-            border-radius: 4px; background: var(--accent-soft); color: var(--accent);
-            margin-left: 0.5rem; vertical-align: middle;
+            border-radius: 4px; background: var(--sage-soft); color: var(--sage);
+            margin-left: 0.5rem; vertical-align: middle; letter-spacing: 0.04em;
         }
-        .repo-desc { margin: 0.8rem 0; font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; }
-        .repo-meta { display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: var(--text-muted); }
+        .repo-desc { margin: 0.8rem 0; font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; position: relative; }
+        .repo-meta { display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: var(--text-muted); position: relative; }
+        .repo-meta span:last-child { color: var(--accent-strong); }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         @media (max-width: 768px) {
@@ -138,7 +161,7 @@
                 ul.innerHTML = "";
                 repos.sort((a,b) => (b.stargazers_count - a.stargazers_count) || (new Date(b.pushed_at) - new Date(a.pushed_at)));
 
-                const filtered = repos.filter(r => r.has_pages);
+                const filtered = repos.filter(r => r.has_pages && !r.fork && !r.archived && !r.disabled);
 
                 filtered.forEach(repo => {
                     const card = document.createElement("li");
