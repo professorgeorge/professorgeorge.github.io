@@ -4,8 +4,10 @@
     <meta charset="UTF-8" />
     <title>Babu George @ GitHub</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Babu George — projects and published sites, synced live from GitHub." />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;700&family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <style>
         /* "Ember & Sage" palette: warm terracotta + amber accents against an inky
            ink-navy backdrop, with a muted sage secondary tone for contrast. */
@@ -13,6 +15,7 @@
             --bg-deep: #14110f;
             --bg-mid: #23190f;
             --card: rgba(38, 30, 24, 0.65);
+            --card-hover: rgba(43, 33, 26, 0.82);
             --accent: #e8935a;
             --accent-strong: #f2b544;
             --accent-soft: rgba(232, 147, 90, 0.14);
@@ -20,175 +23,442 @@
             --sage-soft: rgba(143, 174, 139, 0.16);
             --text-main: #f3ead9;
             --text-muted: #b9a998;
+            --text-faint: #8a7c6c;
             --border-subtle: rgba(243, 234, 217, 0.09);
+            --border-strong: rgba(243, 234, 217, 0.2);
             --linkedin: #0a66c2;
+            --focus-ring: #f2c877;
+            --ease: cubic-bezier(0.16, 1, 0.3, 1);
         }
+
         * { box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
         body {
             margin: 0;
             min-height: 100vh;
             font-family: 'Manrope', system-ui, -apple-system, sans-serif;
+            font-size: 16px;
+            line-height: 1.5;
             background:
                 radial-gradient(circle at 15% 0%, rgba(232, 147, 90, 0.16) 0, transparent 45%),
                 radial-gradient(circle at 85% 15%, rgba(143, 174, 139, 0.14) 0, transparent 50%),
                 radial-gradient(circle at top, var(--bg-mid) 0, var(--bg-deep) 60%, #060403 100%);
+            background-attachment: fixed;
             color: var(--text-main);
             display: flex;
             justify-content: center;
         }
-        .page { width: 100%; max-width: 1000px; padding: 3rem 1.5rem; }
+
+        /* Accessible focus states — visible on every interactive element,
+           keyboard-only by default via :focus-visible. */
+        a:focus-visible,
+        button:focus-visible,
+        input:focus-visible {
+            outline: 2px solid var(--focus-ring);
+            outline-offset: 3px;
+            border-radius: 4px;
+        }
+        a, button, input { font-family: inherit; }
+
+        .skip-link {
+            position: absolute;
+            left: -999px;
+            top: auto;
+            background: var(--accent-strong);
+            color: #1a1208;
+            padding: 0.75rem 1.25rem;
+            border-radius: 0 0 0.5rem 0;
+            font-weight: 700;
+            z-index: 100;
+        }
+        .skip-link:focus {
+            left: 0;
+            top: 0;
+        }
+
+        .page { width: 100%; max-width: 1080px; padding: clamp(2rem, 5vw, 4rem) clamp(1.25rem, 4vw, 2rem); }
+
         header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 2rem;
-            margin-bottom: 3rem;
-            animation: fadeIn 0.8s ease-out;
+            flex-wrap: wrap;
+            gap: 1.5rem 2rem;
+            margin-bottom: 2.5rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border-subtle);
         }
-        .profile-section { display: flex; align-items: center; gap: 1.5rem; }
+        .profile-section { display: flex; align-items: center; gap: 1.5rem; min-width: 0; }
         .avatar {
-            width: 80px; height: 80px;
+            width: 76px; height: 76px;
             border-radius: 50%;
             padding: 3px;
+            flex-shrink: 0;
             background: linear-gradient(135deg, var(--accent), var(--accent-strong), var(--sage));
-            box-shadow: 0 0 24px rgba(232, 147, 90, 0.35);
+            box-shadow: 0 0 24px rgba(232, 147, 90, 0.3);
+        }
+        .title-block { min-width: 0; }
+        .eyebrow {
+            display: block;
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--sage);
+            margin-bottom: 0.35rem;
         }
         .title-block h1 {
-            margin: 0; font-size: 2.3rem; letter-spacing: -0.03em;
-            font-family: 'Fraunces', serif; font-weight: 700;
+            margin: 0; font-size: clamp(1.7rem, 3.4vw, 2.5rem); letter-spacing: -0.02em; line-height: 1.1;
+            font-family: 'Fraunces', Georgia, serif; font-weight: 600;
             background: linear-gradient(100deg, var(--text-main) 30%, var(--accent) 100%);
             -webkit-background-clip: text; background-clip: text; color: transparent;
         }
-        .subtitle { margin: 0.35rem 0 0; color: var(--text-muted); font-size: 1rem; letter-spacing: 0.01em; }
+        .subtitle { margin: 0.5rem 0 0; color: var(--text-muted); font-size: 0.98rem; letter-spacing: 0.01em; }
+
+        .header-actions { display: flex; align-items: center; gap: 0.75rem; flex-shrink: 0; }
 
         .btn-linkedin {
             display: inline-flex; align-items: center; gap: 0.6rem;
             background: var(--linkedin); color: white;
             text-decoration: none; padding: 0.6rem 1.2rem;
             border-radius: 999px; font-weight: 600; font-size: 0.9rem;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: transform 0.2s var(--ease), box-shadow 0.2s var(--ease);
+            white-space: nowrap;
         }
         .btn-linkedin:hover { transform: scale(1.05); box-shadow: 0 0 15px rgba(10, 102, 194, 0.4); }
 
-        main {
-            background: rgba(35, 25, 15, 0.35);
-            backdrop-filter: blur(14px);
-            border-radius: 1.5rem;
-            border: 1px solid var(--border-subtle);
-            padding: 2rem;
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
+        main { position: relative; }
+
+        section + section { margin-top: 2.5rem; }
+
+        .section-heading {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.25rem;
         }
+        .section-heading h2 {
+            margin: 0;
+            font-family: 'Fraunces', Georgia, serif;
+            font-weight: 600;
+            font-size: 1.5rem;
+            letter-spacing: -0.01em;
+        }
+        .repo-count { color: var(--text-faint); font-size: 0.85rem; }
+
+        /* Filter/search toolbar */
+        .toolbar {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+        .search-field {
+            position: relative;
+            flex: 1 1 260px;
+        }
+        .search-field svg {
+            position: absolute;
+            left: 0.9rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px; height: 16px;
+            color: var(--text-faint);
+            pointer-events: none;
+        }
+        #repo-search {
+            width: 100%;
+            background: rgba(20, 15, 10, 0.5);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-main);
+            padding: 0.65rem 1rem 0.65rem 2.4rem;
+            border-radius: 0.7rem;
+            font-size: 0.92rem;
+            transition: border-color 0.2s var(--ease), background 0.2s var(--ease);
+        }
+        #repo-search::placeholder { color: var(--text-faint); }
+        #repo-search:hover { border-color: var(--border-strong); }
+        #repo-search:focus { border-color: var(--accent); background: rgba(20, 15, 10, 0.75); }
+
+        .sort-select {
+            background: rgba(20, 15, 10, 0.5);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-main);
+            padding: 0.65rem 1rem;
+            border-radius: 0.7rem;
+            font-size: 0.88rem;
+            cursor: pointer;
+        }
+        .sort-select:hover { border-color: var(--border-strong); }
+
         #sites {
             list-style: none; padding: 0; margin: 0;
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem;
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 1.25rem;
         }
         .site-card {
             background: var(--card);
             border: 1px solid var(--border-subtle);
             border-radius: 1rem;
-            padding: 1.2rem;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 1.3rem 1.3rem 1.1rem;
+            transition: transform 0.3s var(--ease), border-color 0.3s var(--ease), box-shadow 0.3s var(--ease), background 0.3s var(--ease), opacity 0.25s var(--ease);
             position: relative; overflow: hidden;
+            opacity: 0;
+            transform: translateY(8px);
+            animation: cardIn 0.5s var(--ease) forwards;
         }
         .site-card::before {
             content: ""; position: absolute; inset: 0;
             background: linear-gradient(135deg, var(--accent-soft), transparent 60%);
-            opacity: 0; transition: opacity 0.3s;
+            opacity: 0; transition: opacity 0.3s var(--ease);
         }
-        .site-card:hover::before { opacity: 1; }
-        .site-card:hover {
-            transform: translateY(-5px) scale(1.02);
+        .site-card:hover::before, .site-card:focus-within::before { opacity: 1; }
+        .site-card:hover, .site-card:focus-within {
+            transform: translateY(-4px);
             border-color: var(--accent);
+            background: var(--card-hover);
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
-        .site-card a { color: var(--accent); text-decoration: none; font-weight: 700; font-size: 1.1rem; position: relative; }
+        .card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 0.75rem; position: relative; }
+        .site-card a.repo-link {
+            color: var(--text-main);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.05rem;
+            letter-spacing: -0.01em;
+        }
+        .site-card a.repo-link::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+        }
+        .site-card a.repo-link:hover { color: var(--accent); }
         .badge {
-            font-size: 0.65rem; text-transform: uppercase; padding: 0.2rem 0.5rem;
+            font-size: 0.65rem; text-transform: uppercase; padding: 0.25rem 0.5rem;
             border-radius: 4px; background: var(--sage-soft); color: var(--sage);
-            margin-left: 0.5rem; vertical-align: middle; letter-spacing: 0.04em;
+            letter-spacing: 0.06em; flex-shrink: 0; font-weight: 700;
+            position: relative;
         }
-        .repo-desc { margin: 0.8rem 0; font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; position: relative; }
-        .repo-meta { display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: var(--text-muted); position: relative; }
-        .repo-meta span:last-child { color: var(--accent-strong); }
+        .repo-desc {
+            margin: 0.7rem 0 0.9rem; font-size: 0.87rem; color: var(--text-muted); line-height: 1.55;
+            position: relative;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .repo-meta { display: flex; justify-content: space-between; align-items: center; font-size: 0.78rem; color: var(--text-faint); position: relative; gap: 0.5rem; }
+        .repo-meta .lang { display: inline-flex; align-items: center; gap: 0.4rem; min-width: 0; }
+        .lang-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+        .repo-meta .stars { color: var(--accent-strong); font-weight: 600; white-space: nowrap; }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        @media (max-width: 768px) {
-            header { flex-direction: column; align-items: flex-start; gap: 1rem; }
-            .btn-linkedin { align-self: flex-start; }
+        .empty-state, .status-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            color: var(--text-muted);
+            padding: 3rem 1.5rem;
+            border: 1px dashed var(--border-subtle);
+            border-radius: 1rem;
         }
+
+        footer {
+            margin-top: 3rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-subtle);
+            text-align: center;
+            color: var(--text-faint);
+            font-size: 0.8rem;
+        }
+        footer a { color: var(--text-muted); }
+
+        @keyframes cardIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Respect user motion preference: disable decorative transitions/animations. */
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+            *, *::before, *::after {
+                animation-duration: 0.001ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.001ms !important;
+                scroll-behavior: auto !important;
+            }
+            .site-card { opacity: 1; transform: none; }
+            .site-card:hover, .site-card:focus-within { transform: none; }
+            .btn-linkedin:hover { transform: none; }
+        }
+
+        @media (max-width: 640px) {
+            header { flex-direction: column; align-items: flex-start; }
+            .header-actions { width: 100%; }
+            .btn-linkedin { width: 100%; justify-content: center; }
+            .toolbar { flex-direction: column; }
+        }
+
+        /* Respect users who have requested more contrast or a light scheme at the OS level
+           by keeping borders and text at safe contrast ratios already; no additional
+           overrides required for prefers-contrast here since the dark palette already
+           exceeds WCAG AA for body text. */
     </style>
 </head>
 <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
     <div class="page">
         <header>
             <div class="profile-section">
-                <img id="user-avatar" class="avatar" src="https://github.com/professorgeorge.png" alt="Babu George" />
+                <img id="user-avatar" class="avatar" src="https://github.com/professorgeorge.png" alt="Portrait of Babu George" width="76" height="76" />
                 <div class="title-block">
-                    <h1>Babu George @ GitHub</h1>
+                    <span class="eyebrow">GitHub Portfolio</span>
+                    <h1>Babu George</h1>
                     <p class="subtitle">Order in chaos &bull; Strategic Intelligence &bull; AI Ethics</p>
                 </div>
             </div>
-            <a href="https://www.linkedin.com/in/beingbabu/" target="_blank" class="btn-linkedin">
-                Connect on LinkedIn
-            </a>
+            <div class="header-actions">
+                <a href="https://www.linkedin.com/in/beingbabu/" target="_blank" rel="noopener" class="btn-linkedin">
+                    Connect on LinkedIn
+                </a>
+            </div>
         </header>
 
-        <main>
-            <ul id="sites"><li style="color: var(--text-muted)">Syncing repositories...</li></ul>
+        <main id="main-content">
+            <section aria-labelledby="projects-heading">
+                <div class="section-heading">
+                    <h2 id="projects-heading">Published Projects</h2>
+                    <span class="repo-count" id="repo-count" role="status" aria-live="polite"></span>
+                </div>
+
+                <div class="toolbar">
+                    <div class="search-field">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                        <label class="visually-hidden" for="repo-search" style="position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap;">Search projects</label>
+                        <input type="search" id="repo-search" placeholder="Search projects by name, language, or description&hellip;" autocomplete="off" disabled />
+                    </div>
+                    <label class="visually-hidden" for="repo-sort" style="position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap;">Sort projects</label>
+                    <select id="repo-sort" class="sort-select" disabled>
+                        <option value="recent">Recently updated</option>
+                        <option value="stars">Most stars</option>
+                        <option value="name">Name (A&ndash;Z)</option>
+                    </select>
+                </div>
+
+                <ul id="sites">
+                    <li class="status-state">Syncing repositories from GitHub&hellip;</li>
+                </ul>
+            </section>
         </main>
 
-        <footer style="margin-top: 2rem; text-align: center; color: var(--text-muted); font-size: 0.8rem;">
-            &copy; 2026 Babu George, PhD &bull; Automatically updating from GitHub API
+        <footer>
+            &copy; 2026 Babu George, PhD &bull; Automatically updating from the <a href="https://docs.github.com/en/rest" target="_blank" rel="noopener">GitHub API</a>
         </footer>
     </div>
 
     <script>
         const username = "professorgeorge";
+        let allRepos = [];
+
+        const escapeHtml = (str) =>
+            String(str).replace(/[&<>"']/g, (c) => ({
+                "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+            }[c]));
+
+        function renderRepos(repos) {
+            const ul = document.getElementById("sites");
+            const count = document.getElementById("repo-count");
+            ul.innerHTML = "";
+
+            if (repos.length === 0) {
+                ul.innerHTML = '<li class="empty-state">No projects match your search.</li>';
+                count.textContent = "0 projects";
+                return;
+            }
+
+            count.textContent = `${repos.length} project${repos.length === 1 ? "" : "s"}`;
+
+            repos.forEach((repo, i) => {
+                const card = document.createElement("li");
+                card.className = "site-card";
+                card.style.animationDelay = `${Math.min(i, 12) * 0.04}s`;
+                const url = repo.name === `${username}.github.io`
+                    ? `https://${username}.github.io`
+                    : `https://${username}.github.io/${repo.name}`;
+
+                const name = escapeHtml(repo.name);
+                const description = escapeHtml(repo.description || "Experimental work in progress.");
+                const language = escapeHtml(repo.language || "Open Source");
+
+                card.innerHTML = `
+                    <div class="card-top">
+                        <a class="repo-link" href="${url}" target="_blank" rel="noopener">${name}</a>
+                        <span class="badge">Live</span>
+                    </div>
+                    <p class="repo-desc">${description}</p>
+                    <div class="repo-meta">
+                        <span class="lang"><span class="lang-dot" aria-hidden="true"></span>${language}</span>
+                        <span class="stars">&#9733; ${repo.stargazers_count}</span>
+                    </div>
+                `;
+                ul.appendChild(card);
+            });
+        }
+
+        function applyFilters() {
+            const query = document.getElementById("repo-search").value.trim().toLowerCase();
+            const sortMode = document.getElementById("repo-sort").value;
+
+            let result = allRepos.filter((repo) => {
+                if (!query) return true;
+                const haystack = `${repo.name} ${repo.description || ""} ${repo.language || ""}`.toLowerCase();
+                return haystack.includes(query);
+            });
+
+            result = result.slice().sort((a, b) => {
+                if (sortMode === "stars") return b.stargazers_count - a.stargazers_count;
+                if (sortMode === "name") return a.name.localeCompare(b.name);
+                return new Date(b.pushed_at) - new Date(a.pushed_at);
+            });
+
+            renderRepos(result);
+        }
+
         async function fetchPortfolio() {
             const ul = document.getElementById("sites");
+            const searchInput = document.getElementById("repo-search");
+            const sortSelect = document.getElementById("repo-sort");
             try {
                 let repos = [];
                 let page = 1;
-                while(true) {
+                while (true) {
                     const r = await fetch(`https://api.github.com/users/${username}/repos?per_page=100&page=${page}&sort=pushed`);
                     const data = await r.json();
-                    if(!data || data.length === 0) break;
+                    if (!data || data.length === 0) break;
                     repos = repos.concat(data);
-                    if(data.length < 100) break;
+                    if (data.length < 100) break;
                     page++;
                 }
 
-                ul.innerHTML = "";
-                repos.sort((a,b) => (b.stargazers_count - a.stargazers_count) || (new Date(b.pushed_at) - new Date(a.pushed_at)));
+                repos.sort((a, b) => (b.stargazers_count - a.stargazers_count) || (new Date(b.pushed_at) - new Date(a.pushed_at)));
 
-                const filtered = repos.filter(r => r.has_pages && !r.fork && !r.archived && !r.disabled);
+                allRepos = repos.filter((r) => r.has_pages && !r.fork && !r.archived && !r.disabled);
 
-                filtered.forEach(repo => {
-                    const card = document.createElement("li");
-                    card.className = "site-card";
-                    const url = repo.name === `${username}.github.io`
-                        ? `https://${username}.github.io`
-                        : `https://${username}.github.io/${repo.name}`;
-
-                    card.innerHTML = `
-                        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-                            <a href="${url}" target="_blank">${repo.name}</a>
-                            <span class="badge">Live</span>
-                        </div>
-                        <p class="repo-desc">${repo.description || "Experimental work in progress."}</p>
-                        <div class="repo-meta">
-                            <span>${repo.language || "Open Source"}</span>
-                            <span>⭐ ${repo.stargazers_count}</span>
-                        </div>
-                    `;
-                    ul.appendChild(card);
-                });
-
-                if (filtered.length === 0) {
-                    ul.innerHTML = "<li style='color: var(--text-muted)'>No published sites yet.</li>";
+                if (allRepos.length === 0) {
+                    ul.innerHTML = '<li class="empty-state">No published sites yet.</li>';
+                    document.getElementById("repo-count").textContent = "0 projects";
+                    return;
                 }
+
+                searchInput.disabled = false;
+                sortSelect.disabled = false;
+                searchInput.addEventListener("input", applyFilters);
+                sortSelect.addEventListener("change", applyFilters);
+
+                renderRepos(allRepos);
             } catch (e) {
-                ul.innerHTML = "<li>Offline. Check back later!</li>";
+                ul.innerHTML = '<li class="status-state">Offline. Check back later!</li>';
             }
         }
         fetchPortfolio();
